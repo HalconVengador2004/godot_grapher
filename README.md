@@ -1,4 +1,4 @@
-Graphing app
+Graphing app for Godot 4
 =================
 
 A simple 2D graphing application made in Godot Engine.
