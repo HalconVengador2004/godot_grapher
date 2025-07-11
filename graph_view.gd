@@ -15,14 +15,14 @@ var _project = null
 
 func set_project(project):
 	_project = project
-	update()
+	queue_redraw()
 
 
 func _gui_input(event):
 	if event is InputEventMouseMotion:
-		if Input.is_mouse_button_pressed(BUTTON_MIDDLE):
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_MIDDLE):
 			_view_offset += Vector2(-event.relative.x, event.relative.y) / _view_scale
-			update()
+			queue_redraw()
 		else:
 			var mpos = event.position
 			var gpos = _pixel_to_graph_position(mpos)
@@ -30,9 +30,9 @@ func _gui_input(event):
 	elif event is InputEventMouseButton:
 		var factor = 1.1
 		match event.button_index:
-			BUTTON_WHEEL_UP:
+			MOUSE_BUTTON_WHEEL_UP:
 				_add_zoom(factor, event.position)
-			BUTTON_WHEEL_DOWN:
+			MOUSE_BUTTON_WHEEL_DOWN:
 				_add_zoom(1.0 / factor, event.position)
 
 
@@ -41,17 +41,17 @@ func _add_zoom(factor, mpos):
 	_view_scale *= factor
 	var gpos2 = _pixel_to_graph_position(mpos)
 	_view_offset += gpos - gpos2
-	update()
+	queue_redraw()
 
 
 func _pixel_to_graph_position(ppos):
-	return (Vector2(ppos.x, rect_size.y - ppos.y) - rect_size / 2) / _view_scale + _view_offset
+	return (Vector2(ppos.x, size.y - ppos.y) - size / 2) / _view_scale + _view_offset
 
 
 func _draw():
 #	var time_before = OS.get_ticks_usec()
 	
-	var size = rect_size
+	var size = self.size
 	var step_x = 1.0 / _view_scale.x
 	var step_y = 1.0 / _view_scale.y
 	
@@ -70,7 +70,7 @@ func _draw():
 	
 	# Gather variables
 	var cursor_names = _project.get_cursor_names()
-	var var_names = PoolStringArray()
+	var var_names = PackedStringArray()
 	var_names.resize(1 + len(cursor_names))
 	var_names[0] = "x"
 	var var_inputs = []
@@ -97,7 +97,7 @@ func _draw():
 		indexed_funcs[i] = f
 	
 	var expression_context = ExpressionContext.new(expressions, var_inputs)
-	var pixel_width = int(rect_size.x)
+	var pixel_width = int(size.x)
 	var points = []
 	points.resize(pixel_width)
 
@@ -121,7 +121,7 @@ func _draw():
 				#print(expression.get_error_text())
 				break
 			
-			if (typeof(y) == TYPE_REAL or typeof(y) == TYPE_INT) \
+			if (typeof(y) == TYPE_FLOAT or typeof(y) == TYPE_INT) \
 			and (not is_nan(y)) and (not is_inf(y)):
 				points[pi] = Vector2(x, y)
 				pi += 1
@@ -142,7 +142,7 @@ func _draw():
 
 
 func _draw_polyline(points, count, color):
-	var pts = PoolVector2Array()
+	var pts = PackedVector2Array()
 	#    a, b, c, d, e
 	# => a, b, b, c, c, d, d, e
 	pts.resize((count - 2) * 2 + 2)
@@ -159,11 +159,11 @@ func _draw_polyline(points, count, color):
 
 func _draw_grid():
 	var step = _grid_step
-	var gmin = _pixel_to_graph_position(Vector2(0, rect_size.y)).snapped(step) - step
-	var gmax = _pixel_to_graph_position(Vector2(rect_size.x, 0)).snapped(step) + step
+	var gmin = _pixel_to_graph_position(Vector2(0, size.y)).snapped(step) - step
+	var gmax = _pixel_to_graph_position(Vector2(size.x, 0)).snapped(step) + step
 	
-	var counts = rect_size / (_view_scale * step)
-	var max_counts = rect_size / 2
+	var counts = size / (_view_scale * step)
+	var max_counts = size / 2
 	
 	if counts.x < max_counts.x:
 		var x = gmin.x

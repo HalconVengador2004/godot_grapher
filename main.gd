@@ -8,10 +8,10 @@ const _predefined_cursor_names = [
 	"a", "b", "c", "d", "e"
 ]
 
-onready var _outliner := $VB/HSplit/Outliner as Outliner
-onready var _graph_view = $VB/HSplit/VBRight/Graph
-onready var _formula_edit = $VB/HSplit/VBRight/FormulaEdit
-onready var _cursor_dialog := $CursorDialog as CursorDialog
+@onready var _outliner := $VB/HSplit/Outliner as Outliner
+@onready var _graph_view = $VB/HSplit/VBRight/Graph
+@onready var _formula_edit = $VB/HSplit/VBRight/FormulaEdit
+@onready var _cursor_dialog := $CursorDialog as CursorDialog
 
 
 var _project : ProjectData = null
@@ -37,7 +37,7 @@ func _on_FormulaEdit_formula_entered(new_text):
 	var f = _project.get_function_by_name(fname)
 	f.formula = new_text
 	_outliner.update_list()
-	_graph_view.update()
+	_graph_view.queue_redraw()
 
 
 func _on_AddFunctionButton_pressed():
@@ -64,14 +64,14 @@ func _create_function(formula : String):
 
 	_outliner.update_list()
 	_outliner.select_function(fname, true)
-	_graph_view.update()
+	_graph_view.queue_redraw()
 
 
 func _on_Outliner_function_selected(fname):
 	var f = _project.get_function_by_name(fname)
 	_formula_edit.set_function_name(fname)
 	_formula_edit.set_text(f.formula)
-	_graph_view.update()
+	_graph_view.queue_redraw()
 
 
 func _on_AddCursorButton_pressed():
@@ -93,19 +93,19 @@ func _add_cursor():
 
 	_outliner.update_list()
 	_outliner.select_cursor(cname)
-	_graph_view.update()
+	_graph_view.queue_redraw()
 
 
 func _on_Outliner_cursor_changed():
-	_graph_view.update()
+	_graph_view.queue_redraw()
 
 
 func _on_Outliner_cursor_settings_requested(cname):
 	var c = _project.get_cursor_by_name(cname)
 	_cursor_dialog.set_cursor(c)
-	_cursor_dialog.popup_centered_minsize()
+	_cursor_dialog.popup_centered_clamped()
 
 
 func _on_CursorDialog_confirmed():
 	_outliner.call_deferred("update_list")
-	_graph_view.update()
+	_graph_view.queue_redraw()

@@ -2,8 +2,8 @@ extends Control
 
 signal formula_entered(new_text)
 
-onready var _label = $HB/Label
-onready var _line_edit = $HB/LineEdit
+@onready var _label = $HB/Label
+@onready var _line_edit = $HB/LineEdit
 
 # Expression has no API to tell us that list...
 const _built_in_functions = {
@@ -34,24 +34,23 @@ const _built_in_functions = {
 	"ease": true,
 	"decimals": true,
 	"step_decimals": true,
-	"stepify": true,
+	"snapped": true,
 	"lerp": true,
 	"lerp_angle": true,
 	"inverse_lerp": true,
-	"range_lerp": true,
+	"remap": true,
 	"smoothstep": true,
 	"move_toward": true,
-	"dectime": true,
 	#"randomize": true,
 	"randi": true,
 	"randf": true,
-	"rand_range": true,
+	"randf_range": true,
 	#"seed": true,
 	#"rand_seed": true,
-	"deg2rad": true,
-	"rad2deg": true,
-	"linear2db": true,
-	"db2linear": true,
+	"deg_to_rad": true,
+	"rad_to_deg": true,
+	"linear_to_db": true,
+	"db_to_linear": true,
 	#"polar2cartesian": true,
 	#"cartesian2polar": true,
 	"wrapi": true,
@@ -152,4 +151,3 @@ static func _get_used_functions(formula):
 			last_non_identifier = i
 
 	return funcs
-

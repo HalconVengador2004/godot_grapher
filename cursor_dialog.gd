@@ -1,8 +1,8 @@
 extends ConfirmationDialog
 
-onready var _min_value_spinbox = $GridContainer/MinValueSpinBox
-onready var _max_value_spinbox = $GridContainer/MaxValueSpinBox
-onready var _step_spinbox = $GridContainer/StepSpinBox
+@onready var _min_value_spinbox = $GridContainer/MinValueSpinBox
+@onready var _max_value_spinbox = $GridContainer/MaxValueSpinBox
+@onready var _step_spinbox = $GridContainer/StepSpinBox
 
 var _cursor = null
 
@@ -12,7 +12,7 @@ func set_cursor(cursor):
 	_min_value_spinbox.value = cursor.min_value
 	_max_value_spinbox.value = cursor.max_value
 	_step_spinbox.value = cursor.step
-	window_title = str("Edit cursor `", cursor.name, "`")
+	DisplayServer.window_set_title(str("Edit cursor `", cursor.name, "`"))
 	
 
 func _on_MinValueSpinBox_value_changed(value):

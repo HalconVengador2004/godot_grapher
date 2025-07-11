@@ -1,0 +1,11 @@
+res://default_env.tres
+res://main.tscn
+res://cursor_item.tscn
+res://cursor_item.gd
+res://function_item.gd
+res://outliner.gd
+res://function_item.tscn
+res://cursor_dialog.gd
+res://graph_view.gd
+res://formula_edit.gd
+res://main.gd

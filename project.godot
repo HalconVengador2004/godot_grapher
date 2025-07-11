@@ -6,33 +6,29 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
-config_version=4
-
-_global_script_classes=[  ]
-_global_script_class_icons={
-
-}
+config_version=5
 
 [application]
 
 config/name="Grapher"
 run/main_scene="res://main.tscn"
+config/features=PackedStringArray("4.4")
 run/low_processor_mode=true
 config/icon="res://icon.png"
 
 [display]
 
-window/size/width=1200
+window/size/viewport_width=1200
 
 [rendering]
 
+driver/depth_prepass/enable=false
+environment/defaults/default_clear_color=Color(0.0901961, 0.0901961, 0.0901961, 1)
+environment/defaults/default_environment="res://default_env.tres"
 quality/driver/driver_name="GLES2"
 quality/intended_usage/framebuffer_allocation=0
 quality/directional_shadow/size=256
-quality/shadow_atlas/size=256
+lights_and_shadows/shadow_atlas/size=256
 quality/reflections/texture_array_reflections=false
 quality/reflections/high_quality_ggx=false
-quality/depth_prepass/enable=false
-environment/default_clear_color=Color( 0.0901961, 0.0901961, 0.0901961, 1 )
 quality/depth/hdr=false
-environment/default_environment="res://default_env.tres"

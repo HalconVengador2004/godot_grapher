@@ -5,10 +5,10 @@ signal value_changed(new_value)
 signal settings_clicked
 
 
-onready var _label := $HB/Label as Label
-onready var _slider := $HB/HSlider as HSlider
-onready var _spinbox := $HB/SpinBox as SpinBox
-onready var _selected_bg := $SelectionBG as ColorRect
+@onready var _label := $HB/Label as Label
+@onready var _slider := $HB/HSlider as HSlider
+@onready var _spinbox := $HB/SpinBox as SpinBox
+@onready var _selected_bg := $SelectionBG as ColorRect
 
 
 func get_item_name() -> String:
@@ -53,9 +53,12 @@ func _on_HSlider_value_changed(value: float):
 func _gui_input(event):
 	if event is InputEventMouseButton:
 		if event.pressed:
-			if event.button_index == BUTTON_LEFT or event.button_index == BUTTON_RIGHT:
+			if event.button_index == MOUSE_BUTTON_LEFT or event.button_index == MOUSE_BUTTON_RIGHT:
 				emit_signal("clicked")
 
 
 func _on_SettingsButton_pressed():
 	emit_signal("settings_clicked")
+
+func is_type(type): return type == "CursorItem" or is_type(type)
+func    get_type(): return "MyObject"

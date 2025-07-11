@@ -11,9 +11,9 @@ signal function_selected(fname)
 signal cursor_changed
 signal cursor_settings_requested(cname)
 
-onready var _functions_header := $VB/Functions as Control
-onready var _cursors_header := $VB/Cursors as Control
-onready var _container := $VB as VBoxContainer
+@onready var _functions_header := $VB/Functions as Control
+@onready var _cursors_header := $VB/Cursors as Control
+@onready var _container := $VB as VBoxContainer
 
 var _project : ProjectData
 var _selected_function_name := ""
@@ -72,8 +72,8 @@ func _update_function_list():
 		var fi = _container.get_child(index)
 		
 		if not fi is FunctionItem:
-			fi = FunctionItemScene.instance()
-			fi.connect("clicked", self, "_on_function_item_clicked", [fi])
+			fi = FunctionItemScene.instantiate()
+			fi.connect("clicked", Callable(self, "_on_function_item_clicked").bind(fi))
 			_container.add_child(fi)
 			_container.move_child(fi, index)
 			
@@ -105,10 +105,10 @@ func _update_cursors_list():
 			ci = _container.get_child(index)
 		
 		if ci == null or not (ci is CursorItem):
-			ci = CursorItemScene.instance()
-			ci.connect("clicked", self, "_on_cursor_item_clicked", [ci])
-			ci.connect("value_changed", self, "_on_cursor_value_changed", [ci])
-			ci.connect("settings_clicked", self, "_on_cursor_settings_clicked", [ci])
+			ci = CursorItemScene.instantiate()
+			ci.connect("clicked", Callable(self, "_on_cursor_item_clicked").bind(ci))
+			ci.connect("value_changed", Callable(self, "_on_cursor_value_changed").bind(ci))
+			ci.connect("settings_clicked", Callable(self, "_on_cursor_settings_clicked").bind(ci))
 			_container.add_child(ci)
 			_container.move_child(ci, index)
 		
@@ -130,12 +130,13 @@ func _on_function_item_clicked(fi):
 	select_function(fi.get_item_name(), true)
 
 
-func _get_item_node_index(fname: String, klass) -> int:
-	for i in _container.get_child_count():
+func _get_item_node_index(fname: String, klass: Script) -> int:
+	for i in range(_container.get_child_count()):
 		var child = _container.get_child(i)
-		if child is klass and child.get_item_name() == fname:
+		if child.get_script() == klass and child.get_item_name() == fname:
 			return i
 	return -1
+
 
 
 func _on_RemoveFunctionButton_pressed():
